@@ -1,0 +1,12 @@
+body {
+  background-color: #DDDDDD;
+}
+
+#main-window{
+  position: absolute;
+  paddding: 0;
+}
+
+div{
+  position: absolute;
+}
