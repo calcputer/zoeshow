@@ -2,14 +2,14 @@
   "name": "zoeshow",
   "version": "1.0.0",
   "description": "P2P chat application",
-  "main": "server.js",
+  "main": "src/server.js",
   "dependencies": {
     "express": "^4.15.3"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node src/server.js"
   },
   "author": "",
   "license": "ISC"
