@@ -164,7 +164,7 @@ class ConnectionManager{
   }
   
   callReceived(mediaConn){
-    windowManager.containers[0].displayStream(mediaConn.answer());
+    windowManager.containers[0].displayStream(mediaConn.answer(null));
   }
   
   setupSendCamera(id){
