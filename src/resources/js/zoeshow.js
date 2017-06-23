@@ -4,6 +4,10 @@ const MEDIA_STREAM_CONSTRAINTS = {audio:true, video:true};
 
 const ID_MAIN_WINDOW = "main-window";
 
+
+//class that all Containers inherit from
+//each Window in Liquid Galaxy cluster can have one or multiple Containers
+//BaseContainer mostly handles universal display logic
 class BaseContainer{
   constructor(){
     this.width = null;
@@ -17,6 +21,11 @@ class BaseContainer{
   }
 }
 
+//Currently, zoeshow requires every instance to manually enter mutual peer 
+//identifier and whether window is sending or receiving the stream.
+//Eventually should only be needed for tablet/phone starting the program,
+//where LiquidGalaxyManager will handle synchronizing
+//the rest of the windows.
 class SetupConnectionContainer extends BaseContainer{
   constructor(){
     super();
@@ -48,10 +57,8 @@ class SetupConnectionContainer extends BaseContainer{
   startConnection(){
     if(this.isSending.checked){
       connection.setupSendCamera(this.textbox.value);
-      console.log(windowManager.containers);
       windowManager.removeContainer();
       windowManager.addContainer(new VideoChatSendContainer());
-      console.log(windowManager.containers[0]);
     } else {
       connection.setupReceiveCamera(this.textbox.value);
       windowManager.removeContainer();
@@ -64,7 +71,7 @@ class VideoChatSendContainer extends BaseContainer{
   constructor(){
     super();
     
-    this.element.textContent = "Waiting for connection...";
+    this.element.textContent = "Trying to establish a connection...";
     
     this.setupContainer();
     
@@ -80,7 +87,6 @@ class VideoChatSendContainer extends BaseContainer{
   }
   
   displayStream(stream){
-    //console.log(stream);
     connection.startCall(stream);
     this.element.textContent = "";
     this.video = document.createElement("video");
@@ -88,8 +94,6 @@ class VideoChatSendContainer extends BaseContainer{
     this.video.srcObject = stream;
     this.video.muted = true;
     this.video.play();
-    //console.log(this.element);
-    //this.element.play();
   }
 }
 
@@ -97,7 +101,7 @@ class VideoChatReceiveContainer extends BaseContainer{
   constructor(){
     super();
     
-    this.element.textContent = "Webcam Loading...";
+    this.element.textContent = "Waiting for stream to start...";
     
     this.setupContainer();
   }
@@ -107,7 +111,6 @@ class VideoChatReceiveContainer extends BaseContainer{
   }
   
   displayStream(stream){
-    console.log(stream);
     this.element.textContent = "";
     this.video = document.createElement("video");
     this.element.appendChild(this.video);
@@ -116,9 +119,13 @@ class VideoChatReceiveContainer extends BaseContainer{
   }
 }
 
+
+//Each web browser instance has one Window with a WindowManager.
+//This will be able to support multiple Containers + dynamic positioning,
+//but currently only supports one Container at a time. 
+//(see ConnectionManager.callReceived)
 class WindowManager{
   constructor(){
-    //only supports one container atm
     this.containers = [];
     //if Liquid Galaxy setup {
       //check if master already exists
@@ -145,6 +152,10 @@ class WindowManager{
   }
 }
 
+//ConnectionManager handles sending and receiving streams.
+//Each browser instance has one ConnectionManager.
+//In the future, will be able to handle multiple streams at a time,
+//as well as general data connections eventually.
 class ConnectionManager{
   constructor(){
     this.flagIsSending = false;
@@ -169,8 +180,6 @@ class ConnectionManager{
   }
   
   callReceived(stream){
-    console.log("call received");
-    console.log(windowManager.containers[0]);
     windowManager.containers[0].displayStream(stream);
   }
   
