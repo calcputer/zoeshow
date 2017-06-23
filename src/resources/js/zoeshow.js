@@ -155,7 +155,7 @@ class ConnectionManager{
       path: '/peerjs'
     })
     this.flagIsSending = true;
-    this.peer.on('connection', this.connectionInitiatedSend.bind(this));
+    this.peer.on('connection', this.connectionInitiatedReceive.bind(this));
   }
   
   connectionInitiatedReceive(conn){
