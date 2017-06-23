@@ -4,7 +4,8 @@
   "description": "P2P chat application",
   "main": "src/server.js",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "peer": "^0.2.8"
   },
   "devDependencies": {},
   "scripts": {
