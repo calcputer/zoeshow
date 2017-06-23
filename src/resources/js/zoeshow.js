@@ -165,7 +165,7 @@ class ConnectionManager{
   connectionInitiatedReceive(conn){
     this.mediaConnection = conn;
     this.mediaConnection.answer(null);
-    this.mediaConnection.on('stream', callReceived.bind(this));
+    this.mediaConnection.on('stream', this.callReceived.bind(this));
   }
   
   callReceived(stream){
