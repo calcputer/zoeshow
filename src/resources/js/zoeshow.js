@@ -48,8 +48,10 @@ class SetupConnectionContainer extends BaseContainer{
   startConnection(){
     if(this.isSending.checked){
       connection.setupSendCamera(this.textbox.value);
+      console.log(windowManager.containers);
       windowManager.removeContainer();
       windowManager.addContainer(new VideoChatSendContainer());
+      console.log(windowManager.containers[0]);
     } else {
       connection.setupReceiveCamera(this.textbox.value);
       windowManager.removeContainer();
@@ -105,6 +107,7 @@ class VideoChatReceiveContainer extends BaseContainer{
   }
   
   displayStream(stream){
+    console.log(stream);
     this.element.textContent = "";
     this.video = document.createElement("video");
     this.element.appendChild(this.video);
@@ -127,6 +130,7 @@ class WindowManager{
   
   addContainer(cont){
     this.containers.push(cont);
+    console.log(this.containers);
     mainWindow.appendChild(cont.element);
     this.resize();
   }
@@ -155,17 +159,19 @@ class ConnectionManager{
       path: '/peerjs'
     })
     this.flagIsSending = true;
-    this.peer.on('connection', this.connectionInitiatedReceive.bind(this));
+    this.peer.on('call', this.connectionInitiatedReceive.bind(this));
   }
   
   connectionInitiatedReceive(conn){
     this.mediaConnection = conn;
-    this.mediaConnection.on('call', callReceived.bind(this));
+    this.mediaConnection.answer(null);
+    this.mediaConnection.on('stream', callReceived.bind(this));
   }
   
-  callReceived(mediaConn){
+  callReceived(stream){
+    console.log("call received");
     console.log(windowManager.containers[0]);
-    windowManager.containers[0].displayStream(mediaConn.answer(null));
+    windowManager.containers[0].displayStream(stream);
   }
   
   setupSendCamera(id){
