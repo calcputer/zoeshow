@@ -164,6 +164,7 @@ class ConnectionManager{
   }
   
   callReceived(mediaConn){
+    console.log(windowManager.containers[0]);
     windowManager.containers[0].displayStream(mediaConn.answer(null));
   }
   
