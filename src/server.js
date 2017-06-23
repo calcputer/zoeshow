@@ -6,7 +6,7 @@ var ExpressPeerServer = require('peer').ExpressPeerServer;
 app.get('/', function(req, res){
     res.sendFile(path.join(__dirname, 'zoeshow.html'));
 });
-app.use('/src/resources', express.static('resources'));
+app.use('/resources', express.static(path.join(__dirname, 'resources')));
 
 var server = app.listen(process.env.PORT);
 
