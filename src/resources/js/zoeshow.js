@@ -46,7 +46,7 @@ class SetupConnectionContainer extends BaseContainer{
   }
   
   startConnection(){
-    if(this.isSending.value){
+    if(this.isSending.checked){
       connection.setupSendCamera(this.textbox.value);
       windowManager.removeContainer();
       windowManager.addContainer(new VideoChatSendContainer());
